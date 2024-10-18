@@ -98,8 +98,11 @@ async function acceptCookies(p) {
       behavior: 'allow',
       downloadPath: path.resolve(pathdownload)
   });
-    
-  await page.locator('div ::-p-text(Baixar)').setTimeout(10000).click();
+  
+  await Promise.all([
+    page.locator('div ::-p-text(Baixar)').setTimeout(10000).click(),
+    page.waitForNavigation({waitUntil: 'networkidle2'})
+  ]);
   // Fecha o browser
   await browser.close();
 })();
