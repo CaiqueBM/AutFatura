@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "fs": "^0.0.1-security",
     "ini": "^5.0.0",
+    "path": "^0.12.7",
     "puppeteer": "^23.6.0"
   },
   "name": "autfatura",
