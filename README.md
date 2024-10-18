@@ -32,7 +32,7 @@ senha = sua_senha
 [diretorio]
 instalacao = sua_instalacao
 path = caminho_para_download
-
+```
 ## Uso
 Para executar o script, utilize o seguinte comando no terminal:
 
