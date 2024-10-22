@@ -4,3 +4,4 @@ node_modules/*
 package.json
 .vscode/launch.json
 *.pdf
+instalacoes.csv
