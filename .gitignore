@@ -5,3 +5,4 @@ package.json
 .vscode/launch.json
 *.pdf
 instalacoes.csv
+instalacoes_ult.csv
