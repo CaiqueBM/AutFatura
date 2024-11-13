@@ -12,7 +12,7 @@ const config = ini.parse(fs.readFileSync('./config.ini', 'utf-8'));
 const login = config.credenciais.login;
 const senha = config.credenciais.senha;
 // const instalacao = config.diretorio.instalacao;
-const arquivo = process.argv[2]
+const aarquivo = process.argv[2]
 
 
 function delay(time) {
@@ -31,11 +31,11 @@ async function ensureDirectoryExists(filePath) {
 }
 
 // https://willschenk.com/labnotes/2024/wait_for_the_download_to_finish_with_puppeteer/
-async function waitUntilDownload(page, fileName = '') {
+async function waitUntilDownload(page, fileName = '',inst) {
   return new Promise((resolve, reject) => {
       page._client().on('Page.downloadProgress', e => { // or 'Browser.downloadProgress'
           if (e.state === 'completed') {
-              console.log('OK');
+              console.log(`OK [${inst}]`);
               resolve();
           } else if (e.state === 'canceled') {
               console.log('FAIL');
@@ -50,7 +50,7 @@ async function acceptCookies(page) {
   
   try {
     // Espera pelo botão de aceitar cookies
-    // await page.waitForSelector(cookieButtonSelector, { timeout: 5000 }); // Aguardar até 5 segundos
+    await page.waitForSelector(cookieButtonSelector, { timeout: 5000 }); // Aguardar até 5 segundos
     await page.locator(cookieButtonSelector).setTimeout(5000).click();
     await page.click(cookieButtonSelector);
   } catch (error) {
@@ -74,7 +74,8 @@ const randomUseragent = require('random-useragent');
         //Variaveis definidas fora do bloco try catch para evitar problemas a frente no codigo.
         browser = await puppeteerExtra.launch({ 
           headless: false,
-          args: ['--incognito', '--window-size=1980,1080'] // Define o tamanho da janela
+          args: ['--window-size=1980,1080'] // Define o tamanho da janela
+          // args: ['--incognito', '--window-size=1980,1080'] // Define o tamanho da janela
           }); 
         // Cria um contexto anônimo (modo incognito)
         context = browser.defaultBrowserContext();
@@ -258,7 +259,7 @@ const randomUseragent = require('random-useragent');
         
                     // Etapa de download
                     await ensureDirectoryExists(String(row.path)); // Verifica se existe e cria o diretório caso não exista
-                    await page.locator('div ::-p-text(Visualizar)').setTimeout(3000).click();
+                    await page.locator('div ::-p-text(Visualizar)').setTimeout(10000).click();
         
                     const client = await page.target().createCDPSession();
                     await client.send('Page.setDownloadBehavior', {
@@ -267,7 +268,7 @@ const randomUseragent = require('random-useragent');
                     });
         
                     await page.locator('div ::-p-text(Baixar)').setTimeout(45000).click();
-                    await waitUntilDownload(page); // Aguarda o download completar
+                    await waitUntilDownload(page,instalacao); // Aguarda o download completar
         
                     // Sai da instalacao
                     await Promise.all([
